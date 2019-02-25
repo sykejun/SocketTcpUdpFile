@@ -119,7 +119,6 @@ public class TcpServer {
 
                 bufferedOutputStream.write(msg.getBytes("utf-8"));//发送准备接收的确认>>>>>>>>>>>>>>>>>>>>>>>>>>>
                 bufferedOutputStream.flush();
-
                 startTime = System.nanoTime();
                 if (fileDesc.getLength() == 0) { //接收空文件处理
                     progressListener.updateProgress(filePosition, 100, 100, 888);
@@ -132,16 +131,14 @@ public class TcpServer {
                     //将网络中的字节流写入本地文件
                     fileOutputStream.write(fileBuf, 0, actualLen);
                     endTime = System.nanoTime();
-                    hasRecieve += actualLen;
-
-                    long diffTime = endTime - startTime;
+                    hasRecieve += actualLen;//进行接收量的累加
+                    long diffTime = endTime - startTime;//进行时间差计算
                     if (diffTime >= 500000000) {//计算传输速度0.5秒一次更新
                         long diffSize = hasRecieve - lastimeRecv;
                         speed = ((double) diffSize / (double) diffTime) * (1000000000.0 / 1024.0);
                         lastimeRecv = hasRecieve;
                         startTime = endTime;
                     }
-
                     progressListener.updateProgress(filePosition, hasRecieve, fileDesc.getLength(), new Double(speed).intValue());
                     // recieve all part of file
                     if (hasRecieve == fileDesc.getLength()) {
@@ -149,7 +146,6 @@ public class TcpServer {
                         break;
                     }
                 }
-
                 if (hasRecieve == fileDesc.getLength()) {
                     String sizeAck = hasRecieve + Configuration.DELIMITER;
                     bufferedOutputStream.write(sizeAck.getBytes("utf-8"));
