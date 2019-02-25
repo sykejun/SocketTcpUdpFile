@@ -51,7 +51,6 @@ public class TcpServer {
         ArrayList<FileDesc> files = null;
         String fileInfo = "";
         byte[] inputBuf = new byte[Configuration.STRING_BUF_LEN];
-
         try {
             serverSocket = new ServerSocket(this.port);//创建tcp服务器, 接收文件
             serverSocket.setSoTimeout(Configuration.WAITING_TIME * 1000);//设置等待连接时长
